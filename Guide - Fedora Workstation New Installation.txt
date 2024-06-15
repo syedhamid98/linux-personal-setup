@@ -16,7 +16,8 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 ## Software
 1. Install software using dnf
-sudo dnf install vim-enhanced htop vlc wireshark nmap mlocate curl git wget net-tools timeshift inkscape gimp android-tools android-file-transfer code ipscan kdenlive filezilla unzip anydesk kvantum bash-completion
+sudo dnf install vim-enhanced htop vlc wireshark nmap mlocate curl git wget net-tools\
+timeshift android-tools android-file-transfer code ipscan kdenlive filezilla unzip kvantum bash-completion nc tcpdump
 
 2. Install software using flatpak
 - Bitwarden
@@ -47,10 +48,12 @@ flatpak install flathub com.github.jeromerobert.pdfarranger
 
 ## Networking
 1. Disable IPv6 sysctl
-vi /etc/sysctl.conf
+cat >> /etc/sysctl.conf << EOF
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
-sysctl -p
+EOF
+
+sysctl -p # apply changes in sysctl.conf
 
 2. Disable IPv6 grub
 vi /etc/default/grub
@@ -67,9 +70,9 @@ sysctl -w net.ipv6.route.flush=1
 1. Mount Network Storage
 - Temporary
 sudo dnf install cifs-utils
-sudo mount -t cifs //192.168.1.15/SyedNAS /syednas -o uid=1000,gid=1000,rw,user,username=admin,password=Hamid981009
+sudo mount -t cifs //<IP Address>/<NAS Directory> /<path to mount> -o uid=1000,gid=1000,rw,user,username=<username>,password=<password>
 
 - Permenant
 vi .smbcredentials
 sudo vi /etc/fstab
-//192.168.1.15/SyedNAS /syednas cifs uid=1000,gid=1000,rw,user,credentials=/home/syedhamid/.smbcredentials  0 0
+//<IP Address>/<NAS Directory> /<path to mount> cifs uid=1000,gid=1000,rw,user,credentials=/home/syedhamid/.smbcredentials  0 0
