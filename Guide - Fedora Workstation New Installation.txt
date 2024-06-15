@@ -1,0 +1,75 @@
+## Fedora Workstation New Installation
+1. Edit dnf.conf 
+vi/etc/dnf/dnf.conf 
+fastestmirror=True
+max_parallel_downloads=10
+deltarpm=True
+
+2. Enable RPM Fusion (https://rpmfusion.org/Configuration)
+sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm\
+https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+3. Setup flatpak (https://flatpak.org/setup/)
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+4. Update System and Reboot
+
+## Software
+1. Install software using dnf
+sudo dnf install vim-enhanced htop vlc wireshark nmap mlocate curl git wget net-tools timeshift inkscape gimp android-tools android-file-transfer code ipscan kdenlive filezilla unzip anydesk kvantum bash-completion
+
+2. Install software using flatpak
+- Bitwarden
+flatpak install flathub com.bitwarden.desktop
+- Telegram
+flatpak install flathub org.telegram.desktop
+- qBittorrent
+flatpak install flathub org.qbittorrent.qBittorrent
+- Stremio
+flatpak install flathub com.stremio.Stremio
+- Handbreak
+flatpak install flathub fr.handbrake.ghb
+-  VS Code
+flatpak install flathub com.visualstudio.code
+- OBS-Studio
+flatpak install flathub com.obsproject.Studio
+- Flameshot
+flatpak install flathub org.flameshot.Flameshot
+- FreeFileSync
+flatpak install flathub org.freefilesync.FreeFileSync
+- Flatseal (flatpak permission manager)
+flatpak install flathub com.github.tchx84.Flatseal
+- Discord
+flatpak install flathub com.discordapp.Discord
+- PDF Arranger
+flatpak install flathub com.github.jeromerobert.pdfarranger
+
+
+## Networking
+1. Disable IPv6 sysctl
+vi /etc/sysctl.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+sysctl -p
+
+2. Disable IPv6 grub
+vi /etc/default/grub
+GRUB_CMDLINE_LINUX='ipv6.disable=1' # add disable line only
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+3. Kernel parameters
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sysctl -w net.ipv6.route.flush=1
+
+## 
+
+1. Mount Network Storage
+- Temporary
+sudo dnf install cifs-utils
+sudo mount -t cifs //192.168.1.15/SyedNAS /syednas -o uid=1000,gid=1000,rw,user,username=admin,password=Hamid981009
+
+- Permenant
+vi .smbcredentials
+sudo vi /etc/fstab
+//192.168.1.15/SyedNAS /syednas cifs uid=1000,gid=1000,rw,user,credentials=/home/syedhamid/.smbcredentials  0 0
